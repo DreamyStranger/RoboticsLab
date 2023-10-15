@@ -68,9 +68,22 @@ def main():
         2: ("pid", square_data),
         3: ("circle", circle_data),
     }
+
+    print("Select a navigation option:")
+    print("1. Point navigation")
+    print("2. Square navigation")
+    print("3. Circular navigation")
     
-    navigation_option = 1  # Change this to select the desired navigation type
-    
+    while True:
+        try:
+            navigation_option = int(input("Enter the option number: "))
+            if navigation_option in [1, 2, 3]:
+                break
+            else:
+                print("Invalid option. Please enter a valid option number.")
+        except ValueError:
+            print("Invalid input. Please enter a valid option number.")
+            
     navigation_type, path_function = navigation_options[navigation_option]
     
     path_x, path_y = path_function(x_r, y_r)
