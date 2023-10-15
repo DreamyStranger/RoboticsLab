@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+__init__.py
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# VS Code
+.vscode/
+.settings/
+
+# Python IDE (add more if needed)
+*.idea/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Compiled Python files
+*.pyc
+
+# Logs
+*.log
+
+# Cache files
+__pycache__/
+
+# Dependency folders
+.env
+
+# Local environment variables
+.env.local
+.env.*.local
+
+# Environment variables
+.env.local
+.env.*.local
+
+# IDE files
+.idea
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
