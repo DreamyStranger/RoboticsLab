@@ -1,7 +1,7 @@
 import numpy as np
 ### These 2 lines are for linux
-import matplotlib
-matplotlib.use('TkAgg')  # Use the TkAgg backend for interactive plots
+#import matplotlib
+#matplotlib.use('TkAgg')  # Use the TkAgg backend for interactive plots
 ###
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
