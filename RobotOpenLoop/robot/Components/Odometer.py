@@ -1,7 +1,5 @@
-from math import pi, cos, sin, atan2
-import matplotlib.pyplot as plt
-import numpy as np
-pi
+from math import cos, sin
+
 class Odometer():
     def __init__(self):
         """
@@ -40,37 +38,6 @@ class Odometer():
         """
         self._vel = 0
         self._steering = 0
-    
-    def plot(self, ax):
-        """
-        Plots the robot's current configuration
-        """
-        width = .1  # Width of the robot representation
-        height = .05  # Height of the robot representation
-        
-        # Rectangle vertices in local(robot's) coordinate frame
-        corners = np.array([
-            [-width/2, -height/2],  # Bottom-left corner
-            [-width/2, height/2],   # Top-left corner
-            [width/2, height/2],    # Top-right corner
-            [width/2, -height/2]    # Bottom-right corner
-        ])
-        
-        # Rotation Matrix
-        rotmat = np.array([
-            [np.cos(self._pose[2]), -np.sin(self._pose[2])],
-            [np.sin(self._pose[2]), np.cos(self._pose[2])]
-        ])
-        
-        # Transformation
-        corners_new = np.dot(rotmat, corners.T).T + self._pose[:2]
-        
-        # Create a closed rectangle for plotting
-        robot = np.vstack([corners_new, corners_new[0, :]])
-        
-        # Plot the robot's shape
-        ax.plot(robot[:, 0], robot[:, 1], 'k-')
-
 
     # Getter methods to access internal state variables
     def get_pose(self):

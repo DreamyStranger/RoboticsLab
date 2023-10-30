@@ -113,7 +113,7 @@ def main():
         ax.grid(True)  # Optional: Add grid for better visualization
 
         # Plot the robot's current position
-        robot.odometer.plot(ax)
+        robot.plot(ax)
         
         # Append the current position to the trajectory
         pose = robot.odometer.get_pose()
