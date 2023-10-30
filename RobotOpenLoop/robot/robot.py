@@ -1,8 +1,9 @@
-from .Components.OdometerComponent import OdometerComponent
-from .Components.PidComponent import PidComponent
+from .Components.Odometer import Odometer
+from .Components.PidController import PidController
 from .Systems.NavigationSystem import NavigationSystem
 from .Components.SteeringController import SteeringController
 from .Components.ProportionalController import ProportionalController
+from .Components.GoalController import GoalController
 
 class Robot:
     def __init__(self):
@@ -10,32 +11,21 @@ class Robot:
         Initializes the Robot with necessary components and systems.
         """
         # Components
-        self.odometer = OdometerComponent()
-        self.pid = PidComponent()
+        self.odometer = Odometer()
+        self.pid = PidController()
         self.steering_controller = SteeringController()
         self.proportional_controller = ProportionalController()
+        self.goal_controller = GoalController()
 
         # Systems
         self.navigation = NavigationSystem(self.odometer, self.pid, 
-                                            self.steering_controller, self.proportional_controller)
+                                            self.steering_controller, self.proportional_controller, self.goal_controller)
 
     def update(self, dt):
         """
         Updates the navigation system with the given time step.
         """
         self.navigation.update(dt)
-
-    def set_max_steering(self, steering):
-        """
-        Sets the maximum steering angle of the odometer.
-        """
-        self.odometer.max_steering = steering
-
-    def set_cruise_vel(self, vel):
-        """
-        Sets the cruise velocity of the odometer.
-        """
-        self.odometer.cruise_vel = vel
     
     def plot(self, ax):
         """

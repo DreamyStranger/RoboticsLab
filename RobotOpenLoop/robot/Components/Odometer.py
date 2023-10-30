@@ -2,7 +2,7 @@ from math import pi, cos, sin, atan2
 import matplotlib.pyplot as plt
 import numpy as np
 pi
-class OdometerComponent():
+class Odometer():
     def __init__(self):
         """
         Constructor: Initializes the odometer component with default values.
@@ -75,13 +75,7 @@ class OdometerComponent():
     # Getter methods to access internal state variables
     def get_pose(self):
         return self._pose
-
-    def get_x(self):
-        return self._pose[0]
-
-    def get_y(self):
-        return self._pose[1]
-
+    
     def get_theta(self):
         return self._pose[2]
 

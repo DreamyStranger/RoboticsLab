@@ -92,7 +92,7 @@ def main():
     
     path_x, path_y = path_function(x_r, y_r)
     robot.navigation.type = navigation_type
-    robot.navigation.add_goals(path_x, path_y)
+    robot.goal_controller.add_goals(path_x, path_y)
 
     fig, ax = plt.subplots()
     ax.axis([-2, 2, -2, 2])
@@ -134,7 +134,7 @@ def main():
         
         plt.pause(0.1)  # Pause to update the display
 
-        if count == 20000 or robot.navigation._goal_reached:
+        if count == 20000 or robot.goal_controller.all_goals_reached():
             break
         count += 1
 

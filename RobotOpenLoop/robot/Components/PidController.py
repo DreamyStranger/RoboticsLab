@@ -1,4 +1,4 @@
-class PidComponent:
+class PidController:
     def __init__(self):
         """
         Constructor: Initializes the PID controller with default gains and internal states.

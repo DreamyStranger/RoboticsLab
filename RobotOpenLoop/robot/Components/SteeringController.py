@@ -16,14 +16,14 @@ class SteeringController:
         # Calculate the desired orientation towards the goal
         desired_theta = atan2(goal[1] - pose[1], goal[0] - pose[0])
         
-        # Calculate the steering command based on the error in orientation
+        # Calculate the steering
         steering = desired_theta - pose[2]
-        steering = atan2(sin(steering), cos(steering))  # Normalize the steering angle
+        steering = self._K_h *atan2(sin(steering), cos(steering))  # Normalize the steering angle
         
-        # Apply the gain and limit the steering command
-        steering = self._K_h * sign(steering) * min(abs(steering), self.max_steering)
+        # Limit steering
+        steering = sign(steering) * min(abs(steering), self.max_steering)
         
-        return steering  # Return the steering command
+        return steering 
         
     # Setter method to modify the gain of the controller
     def set_gains(self, K_steering):
