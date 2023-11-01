@@ -4,9 +4,7 @@ import numpy as np
 #matplotlib.use('TkAgg')  # Use the TkAgg backend for interactive plots
 ###
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 from robot.robot import Robot
-import time
 
 # Initial robot position and settings
 x_r = 0
@@ -27,7 +25,7 @@ def circle_data(x, y):
         tuple: Lists of x and y coordinates forming a circular path.
     """
     r = 1
-    theta = np.linspace(0, 2*np.pi, 100)
+    theta = np.linspace(0, 2*np.pi, 50)
     x_out = x + r * np.cos(theta)
     y_out = y + r * np.sin(theta)
     return x_out.tolist(), y_out.tolist()
@@ -93,13 +91,9 @@ def main():
     path_x, path_y = path_function(x_r, y_r)
     robot.navigation.type = navigation_type
     robot.goal_controller.add_goals(path_x, path_y)
-
     fig, ax = plt.subplots()
-    ax.axis([-2, 2, -2, 2])
     
     # Initialize empty lists to store the path and trajectory
-    trajectory_x = []
-    trajectory_y = []
 
     while True:
         print("Pose: ", robot.odometer.get_pose())
@@ -108,12 +102,9 @@ def main():
         print("Angular Velocity: ", angular)
         robot.update(0.1)
 
-        ax.clear()  # Clear the previous frame
-        ax.grid(True)  # Optional: Add grid for better visualization
- 
         # Plot the robot's current position
         robot.draw(ax)
-        
+
         plt.pause(0.1)  # Pause to update the display
 
         if count == 20000 or robot.goal_controller.all_goals_reached():
