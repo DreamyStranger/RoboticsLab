@@ -12,8 +12,6 @@ class NavigationSystem():
         - proportional_controller: The proportional controller as an alternative for PID.
         - goal_controller: The goal controller managing navigation goals.
         """
-        # Basic Error Handling: Ensure all components are properly initialized.
-        assert all([odometer, pid, steering_controller, proportional_controller, goal_controller]), "All components must be initialized."
         
         # Modules
         self._odometer = odometer
