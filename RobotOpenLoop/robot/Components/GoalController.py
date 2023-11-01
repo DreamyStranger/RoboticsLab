@@ -9,6 +9,7 @@ class GoalController():
         """
         self._goals = Queue()  # Queue to hold the sequence of goals
         self._goal = []  # Current goal
+        self._visited = [] # Visited goals
         self._goals_reached = False  # Flag to check if goal is reached
         self._distance = 0  # Initializing the _distance attribute
         self.distance_accuracy = 0.1  # Accuracy threshold for reaching a goal
@@ -44,6 +45,7 @@ class GoalController():
         self._distance = self.distance_to_goal(pose)
         
         if self._distance < self.distance_accuracy:
+            self._visited.append(self._goal)
             self._goal_reached_action(dt)
 
     def _update_current_goal(self, dt):

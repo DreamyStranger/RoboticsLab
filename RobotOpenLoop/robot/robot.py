@@ -5,6 +5,7 @@ from .Systems.NavigationSystem import NavigationSystem
 from .Components.SteeringController import SteeringController
 from .Components.ProportionalController import ProportionalController
 from .Components.GoalController import GoalController
+from .Components.Lidar import Lidar
 # Python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,6 +21,7 @@ class Robot:
         self.steering_controller = SteeringController()
         self.proportional_controller = ProportionalController()
         self.goal_controller = GoalController()
+        self.lidar = Lidar()
 
         # Systems
         self.navigation = NavigationSystem(self.odometer, self.pid, 
@@ -62,4 +64,8 @@ class Robot:
         
         # Plot the robot's shape
         ax.plot(robot[:, 0], robot[:, 1], 'k-')
+
+        self.lidar.plot(ax, pose,[])
+        ax.set_xlim([-5, 5])
+        ax.set_ylim([-5, 5])
             

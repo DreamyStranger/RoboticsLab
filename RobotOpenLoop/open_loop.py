@@ -122,7 +122,7 @@ def main():
         
         # Plot the path
         if navigation_type == "pid":
-            ax.plot(path_x, path_y, 'o', label='Path')
+            ax.plot(path_x, path_y, 'ro', label='Path')
         else:
             ax.plot(path_x, path_y, 'b--', label='Path')
         
