@@ -27,7 +27,5 @@ class Lidar:
 
             xr = robot_pos[0] + distance * np.cos(adjusted_angle)
             yr = robot_pos[1] + distance * np.sin(adjusted_angle)
-            ax.plot([robot_pos[0], xr], [robot_pos[1], yr], 'y-')
-
-        ax.plot(robot_pos[0], robot_pos[1], 'bo')  # Robot position
+            ax.plot([robot_pos[0], xr], [robot_pos[1], yr], 'y--')
         ax.axis('equal')

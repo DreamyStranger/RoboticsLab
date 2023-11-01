@@ -32,7 +32,7 @@ def circle_data(x, y):
     y_out = y + r * np.sin(theta)
     return x_out.tolist(), y_out.tolist()
 
-def square_data(x, y, side_length=1):
+def square_data(x, y, side_length = 4):
     """
     Generate square path data.
 

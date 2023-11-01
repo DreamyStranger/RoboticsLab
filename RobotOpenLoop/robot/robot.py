@@ -37,8 +37,8 @@ class Robot:
         """
         Plots the robot's current configuration
         """
-        width = .1  # Width of the robot representation
-        height = .05  # Height of the robot representation
+        width = .6 # Width of the robot representation
+        height = .3 # Height of the robot representation
         pose = self.odometer.get_pose()
         
         # Rectangle vertices in local(robot's) coordinate frame
@@ -62,10 +62,10 @@ class Robot:
         # Create a closed rectangle for plotting
         robot = np.vstack([corners_new, corners_new[0, :]])
         
-        # Plot the robot's shape
+        # Plot
+        self.lidar.plot(ax, pose,[])
         ax.plot(robot[:, 0], robot[:, 1], 'k-')
 
-        self.lidar.plot(ax, pose,[])
         ax.set_xlim([-5, 5])
         ax.set_ylim([-5, 5])
             
