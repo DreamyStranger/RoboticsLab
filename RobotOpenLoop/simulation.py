@@ -109,28 +109,10 @@ def main():
         robot.update(0.1)
 
         ax.clear()  # Clear the previous frame
-        ax.axis([-2, 2, -2, 2])  # Set the limits of your workspace
         ax.grid(True)  # Optional: Add grid for better visualization
-
+ 
         # Plot the robot's current position
-        robot.plot(ax)
-        
-        # Append the current position to the trajectory
-        pose = robot.odometer.get_pose()
-        trajectory_x.append(pose[0])
-        trajectory_y.append(pose[1])
-        
-        # Plot the path
-        if navigation_type == "pid":
-            ax.plot(path_x, path_y, 'ro', label='Path')
-        else:
-            ax.plot(path_x, path_y, 'b--', label='Path')
-        
-        # Plot the robot's trajectory
-        ax.plot(trajectory_x, trajectory_y, 'g-', label='Trajectory')
-        
-        # Add legend
-        ax.legend()
+        robot.draw(ax)
         
         plt.pause(0.1)  # Pause to update the display
 

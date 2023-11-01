@@ -112,3 +112,30 @@ class GoalController():
             Return distance to current goal
         """
         return self._distance
+    
+    def get_goals(self):
+        """
+            Return not visited goals
+        """
+        return self._goals
+    
+    def get_visited(self):
+        """
+            Return visited goals
+        """
+        return self._visited
+    
+    ### Visualization
+
+    def plot(self, ax):
+        # Plot visited goals
+        for point in self._visited:
+            ax.scatter(point[0], point[1], c='g', marker='o')  # Green color for visited goals
+
+        # Plot the rest of the goals in the queue
+        for point in list(self._goals.queue):
+            ax.scatter(point[0], point[1], c='r', marker='o')  # Red color for the rest of the goals
+        
+        # Plot current goal
+        if self._goal:
+            ax.scatter(self._goal[0], self._goal[1], c='b', marker='o')  # Blue color for the current goal
