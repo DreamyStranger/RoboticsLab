@@ -13,5 +13,7 @@ class EnvironmentCreator:
         # Add a set of predefined obstacles to the environment
         self.add_rectangle_obstacle(-2, -5, 4, 1)
         self.add_rectangle_obstacle(-2, 4, 4, 1)
-        self.add_rectangle_obstacle(-6, -2, 1, 1)
+        self.add_rectangle_obstacle(-6, -2, 2, 4)
+        self.add_rectangle_obstacle(4, -2, 2, 4)
+
         # Add more obstacles as needed
