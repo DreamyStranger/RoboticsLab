@@ -4,8 +4,11 @@ from .Components.PidController import PidController
 from .Components.SteeringController import SteeringController
 from .Components.ProportionalController import ProportionalController
 from .Components.GoalController import GoalController
-from .Components.Lidar import Lidar
+from .Components.GapDetector import GapDetector
+
+# Environment
 from .Environment.Environment import Environment
+
 
 # Systems
 from .Systems.NavigationSystem import NavigationSystem
@@ -24,7 +27,7 @@ class Robot:
         self.steering_controller = SteeringController()
         self.proportional_controller = ProportionalController()
         self.goal_controller = GoalController()
-        self.lidar = Lidar()
+        self.gap_detector = GapDetector()
 
         # Environment
         self.environment = Environment()
@@ -32,8 +35,9 @@ class Robot:
         # Systems
         self.navigation = NavigationSystem(self.odometer, self.pid, 
                                             self.steering_controller, self.proportional_controller, self.goal_controller)
-        self.render = RenderSystem(self.odometer, self.goal_controller, self.lidar, self.environment)
-        self.environment_sensing = EnvironmentSensingSystem(self.odometer, EnvironmentCreator(self.environment), self.environment, self.lidar)
+        self.render = RenderSystem(self.odometer, self.goal_controller, self.gap_detector, self.environment)
+        self.environment_sensing = EnvironmentSensingSystem(self.odometer, EnvironmentCreator(self.environment), 
+                                                            self.environment, self.gap_detector)
 
     def update(self, dt):
         """
@@ -42,7 +46,7 @@ class Robot:
         
         self.navigation.update(dt)
         # Update the lidar with the current robot pose and obstacles
-        self.lidar.update(self.odometer.get_pose(), self.environment.obstacles)
+        self.environment_sensing.update(self.goal_controller.get_current_goal())
 
     def draw(self, ax):
         """

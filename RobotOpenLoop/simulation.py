@@ -11,24 +11,6 @@ x_r = 0
 y_r = 0
 theta = 0
 freq = 20
-robot = None
-
-def circle_data(x, y):
-    """
-    Generate circular path data.
-
-    Args:
-        x (float): X-coordinate of the circle center.
-        y (float): Y-coordinate of the circle center.
-
-    Returns:
-        tuple: Lists of x and y coordinates forming a circular path.
-    """
-    r = 1
-    theta = np.linspace(0, 2*np.pi, 50)
-    x_out = x + r * np.cos(theta)
-    y_out = y + r * np.sin(theta)
-    return x_out.tolist(), y_out.tolist()
 
 def square_data(x, y, side_length = 4):
     """
@@ -63,30 +45,9 @@ def point_data(x, y):
 def main():
     count = 0
     robot = Robot()
-    
-    # Define navigation options with associated navigation types and path functions
-    navigation_options = {
-        1: ("pid", point_data),
-        2: ("pid", square_data),
-        3: ("circle", circle_data),
-    }
 
-    print("Select a navigation option:")
-    print("1. Point navigation")
-    print("2. Square navigation")
-    print("3. Circular navigation")
-    
-    while True:
-        try:
-            navigation_option = int(input("Enter the option number: "))
-            if navigation_option in [1, 2, 3]:
-                break
-            else:
-                print("Invalid option. Please enter a valid option number.")
-        except ValueError:
-            print("Invalid input. Please enter a valid option number.")
             
-    navigation_type, path_function = navigation_options[navigation_option]
+    navigation_type, path_function = "pid", square_data
     
     path_x, path_y = path_function(x_r, y_r)
     robot.navigation.type = navigation_type
@@ -96,10 +57,12 @@ def main():
     # Initialize empty lists to store the path and trajectory
 
     while True:
-        print("Pose: ", robot.odometer.get_pose())
         linear, angular = robot.odometer.get_velocities()
-        print("Linear Velocity: ", linear)
-        print("Angular Velocity: ", angular)
+        #print("Pose: ", robot.odometer.get_pose())
+        #print("Linear Velocity: ", linear)
+        #print("Angular Velocity: ", angular)
+        print("lidar data: ", robot.lidar.get_data())
+        print("Gaps: ", robot.gap_detector._gaps)
         robot.update(0.1)
 
         # Plot the robot's current position

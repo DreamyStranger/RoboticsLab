@@ -30,10 +30,10 @@ class Lidar:
             yr = robot_pos[1] + distance * np.sin(adjusted_angle)
             self.lidar_end_points[i] = (xr, yr)
 
-    def get_lidar_end_points(self):
+    def get_end_points(self):
         return self.lidar_end_points
     
-    def get_lidar_data(self):
+    def get_data(self):
         return self.lidar_data
 
     def get_num_rays(self):

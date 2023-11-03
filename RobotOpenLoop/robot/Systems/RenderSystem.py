@@ -1,23 +1,13 @@
 import numpy as np
 
 class RenderSystem:
-    def __init__(self, odometer, goal_controller, lidar, environment):
+    def __init__(self, odometer, goal_controller, gap_detector, environment):
         """
-        Initialize the rendering system with odometer, goal controller, and lidar.
-
-        Parameters:
-        odometer : Odometer object
-            Provides the pose of the robot.
-        goal_controller : GoalController object
-            Manages the goals for the robot.
-        lidar : Lidar object
-            Provides Lidar sensing data.
-        environment: Environment object
-            Provides the environment the robot is currently in
+            Constructor
         """
         self._odometer = odometer
         self._goal_controller = goal_controller
-        self._lidar = lidar
+        self._gap_detector = gap_detector
         self._environment = environment
 
         self._trajectory_x = []  # List to store x coordinates of trajectory
@@ -49,6 +39,7 @@ class RenderSystem:
         self.plot_lidar(ax, pose)
         self.plot_odometer(ax, pose)
         self.plot_goals(ax, visited_goals, current_goal, other_goals)
+        self.plot_gap(ax)
         self.plot_trajectory(ax, pose)
         self.plot_environment(ax, obstacles)
 
@@ -129,18 +120,15 @@ class RenderSystem:
         pose : tuple
             The pose of the robot (x, y, theta).
         """
-        # Get the end points of the lidar rays
-        lidar_end_points = self._lidar.get_lidar_end_points()
+        pass
 
-        # Get the number of rays from the lidar
-        num_rays = self._lidar.get_num_rays()
-
-        # Loop through each ray and plot it
-        for i in range(num_rays):
-            xr, yr = lidar_end_points[i]
-            ax.plot([pose[0], xr], [pose[1], yr], 'y--')
-
-        ax.axis('equal')
+    def plot_gap(self, ax):
+        """
+        Draw the best gap detected
+        """
+        gap = self._gap_detector.get_best_gap()
+        if gap:
+            ax.scatter(gap[0], gap[1], c='y', marker='o') 
 
 
     def plot_trajectory(self, ax, pose):
