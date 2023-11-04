@@ -5,6 +5,7 @@ import numpy as np
 ###
 import matplotlib.pyplot as plt
 from robot.robot import Robot
+from robot.Lidar import Lidar
 
 # Initial robot position and settings
 x_r = 0
@@ -29,22 +30,11 @@ def square_data(x, y, side_length = 4):
     y_out = [y - half_side, y - half_side, y + half_side, y + half_side]
     return x_out, y_out
 
-def point_data(x, y):
-    """
-    Generate a point path data.
-
-    Args:
-        x (float): X-coordinate of the point.
-        y (float): Y-coordinate of the point.
-
-    Returns:
-        tuple: Lists of x and y coordinates forming a single point.
-    """
-    return [x + 1.5], [y + 1.5]
-
 def main():
     count = 0
     robot = Robot()
+    lidar = Lidar()
+    obstacles = robot.environment.obstacles
 
             
     navigation_type, path_function = "pid", square_data
@@ -53,22 +43,20 @@ def main():
     robot.navigation.type = navigation_type
     robot.goal_controller.add_goals(path_x, path_y)
     fig, ax = plt.subplots()
-    
-    # Initialize empty lists to store the path and trajectory
 
     while True:
         linear, angular = robot.odometer.get_velocities()
+        pose = robot.odometer.get_pose()
+        lidar.update(pose, obstacles)
+        robot.gap_detector.preprocess_lidar(lidar.get_data())
+        robot.update(0.1)
         #print("Pose: ", robot.odometer.get_pose())
         #print("Linear Velocity: ", linear)
         #print("Angular Velocity: ", angular)
-        print("lidar data: ", robot.lidar.get_data())
-        print("Gaps: ", robot.gap_detector._gaps)
-        robot.update(0.1)
-
-        # Plot the robot's current position
+        print("Lidar Data: ", robot.gap_detector.processed_lidar_data)
         robot.draw(ax)
 
-        plt.pause(0.1)  # Pause to update the display
+        plt.pause(0.05)  # Pause to update the display
 
         if count == 20000 or robot.goal_controller.all_goals_reached():
             break

@@ -1,8 +1,7 @@
-import matplotlib.pyplot as plt
 import numpy as np
 
 class Lidar:
-    def __init__(self, num_rays=36, max_distance=10):
+    def __init__(self, num_rays=720, max_distance=5):
         self._num_rays = num_rays
         self.max_distance = max_distance
         self.lidar_data = [max_distance] * num_rays

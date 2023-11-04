@@ -34,12 +34,13 @@ class RenderSystem:
         current_goal = self._goal_controller.get_current_goal()
         other_goals = self._goal_controller.get_goals()
         obstacles = self._environment.obstacles
+        lidar_data = self._gap_detector.processed_lidar_data
 
         # Draw
-        self.plot_lidar(ax, pose)
+        self.plot_lidar(ax, lidar_data, pose)
         self.plot_odometer(ax, pose)
         self.plot_goals(ax, visited_goals, current_goal, other_goals)
-        self.plot_gap(ax)
+        self.plot_gap(ax, pose)
         self.plot_trajectory(ax, pose)
         self.plot_environment(ax, obstacles)
 
@@ -110,25 +111,31 @@ class RenderSystem:
         if current_goal:
             ax.scatter(current_goal[0], current_goal[1], c='b', marker='o')
 
-    def plot_lidar(self, ax, pose):
+    def plot_lidar(self, ax, lidar_data, robot_pose):
         """
-        Draw the LiDAR rays.
-
-        Parameters:
-        ax : matplotlib axis object
-            The axis to draw on.
-        pose : tuple
-            The pose of the robot (x, y, theta).
+        Plot the processed LIDAR data.
+        
+        :param robot_pos: Position of the robot as (x, y, theta).
+        :param show: Whether to display the plot.
         """
-        pass
+        # Define angles for processed LIDAR data (-90 to +90 degrees)
+        total_segments = len(lidar_data)
+        angles = np.linspace(-np.pi/2, np.pi/2, total_segments)
 
-    def plot_gap(self, ax):
+        # Plot processed LIDAR data
+        for angle, distance in zip(angles, lidar_data):
+            adjusted_angle = angle + robot_pose[2]  # Adjust the angle based on the robot's orientation
+            xr = robot_pose[0] + distance * np.cos(adjusted_angle)
+            yr = robot_pose[1] + distance * np.sin(adjusted_angle)
+            ax.plot([robot_pose[0], xr], [robot_pose[1], yr], 'y--')
+
+    def plot_gap(self, ax, pose):
         """
         Draw the best gap detected
         """
-        gap = self._gap_detector.get_best_gap()
+        gap = self._gap_detector.get_best_gap()['center']
         if gap:
-            ax.scatter(gap[0], gap[1], c='y', marker='o') 
+            ax.scatter(gap[0] + pose[0], gap[1] + pose[1], c='y', marker='o') 
 
 
     def plot_trajectory(self, ax, pose):
