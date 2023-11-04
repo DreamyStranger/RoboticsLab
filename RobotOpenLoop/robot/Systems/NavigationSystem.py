@@ -44,8 +44,12 @@ class NavigationSystem():
             return
         
         # Calculate steering command based on the current goal.
+        gap_goal = self._goal_controller.gap_goal
         goal = self._goal_controller.get_current_goal()
-        steering = self._steering_controller.compute(goal, pose)
+        if not gap_goal:
+            steering = self._steering_controller.compute(goal, pose)
+        else:
+            steering = self._steering_controller.compute(gap_goal, pose)
 
         # Calculate velocity command based on the chosen control strategy and update the odometer.
         distance = self._goal_controller.get_distance_to_goal()

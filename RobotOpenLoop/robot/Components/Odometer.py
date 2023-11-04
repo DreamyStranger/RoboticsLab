@@ -12,7 +12,7 @@ class Odometer():
         
         # public variables representing the configurable parameters
         self.max_vel = 1  # maximum allowable velocity
-        self.cruise_vel = 0.5  # desired cruising velocity
+        self.cruise_vel = 1  # desired cruising velocity
 
     def transform(self, pose):
         """

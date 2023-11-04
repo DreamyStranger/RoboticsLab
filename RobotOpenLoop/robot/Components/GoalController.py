@@ -10,6 +10,7 @@ class GoalController():
         self._goals = Queue()  # Queue to hold the sequence of goals
         self._goal = []  # Current goal
         self._visited = [] # Visited goals
+        self.gap_goal = [] # Goal from the largest gap
         self._goals_reached = False  # Flag to check if goal is reached
         self._distance = 0  # Initializing the _distance attribute
         self.distance_accuracy = 0.1  # Accuracy threshold for reaching a goal

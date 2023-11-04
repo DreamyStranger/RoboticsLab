@@ -44,7 +44,7 @@ class Robot:
         Updates the navigation system with the given time step.
         """
         self.environment_sensing.update(self.goal_controller.get_current_goal())
-        self.goal_controller._goal = self.gap_detector._gap_goal
+        self.goal_controller.gap_goal = self.gap_detector.get_gap_goal()
         self.navigation.update(dt)
         # Update the lidar with the current robot pose and obstacles
 

@@ -11,7 +11,7 @@ class GapDetector:
         self.angular_resolution = angular_resolution
         self.threshold_distance = 0
 
-    def preprocess_lidar(self, lidar_data):
+    def preprocess_lidar(self, lidar_data, min_distance = 0.1, max_distance = 3):
         """
         Preprocesses LIDAR data by segmenting and taking mean.
         The resultant data starts from -90 degrees to +90 degrees.
@@ -36,6 +36,7 @@ class GapDetector:
             segment_means.append(segment_mean)
 
         self.processed_lidar_data = segment_means
+        self.processed_lidar_data = np.clip(segment_means, min_distance, max_distance)
         self.threshold_distance = min(min(self.processed_lidar_data) + 0.3, max(self.processed_lidar_data))
 
     def update(self, robot_pose):
@@ -58,7 +59,6 @@ class GapDetector:
                 end_index = i - 1 if distance <= self.threshold_distance else i
                 gaps.append((start_index, end_index))
                 in_gap = False
-        print("Gaps: ", gaps)
         self._gaps = gaps
     
     def find_largest_gap(self):
@@ -97,8 +97,8 @@ class GapDetector:
 
         self._gap_goal = [target_x_global, target_y_global]
     
-    def get_best_gap(self):
+    def get_gap_goal(self):
         """
         Returns best gap
         """
-        return self._best_gap
+        return self._gap_goal

@@ -16,6 +16,7 @@ freq = 20
 def main():
     count = 0
     robot = Robot()
+    robot.goal_controller.add_goal([0, 10])
     lidar = LidarEmulator()
     obstacles = robot.environment.obstacles
     fig, ax = plt.subplots()
@@ -30,14 +31,13 @@ def main():
         #print("Linear Velocity: ", linear)
         #print("Angular Velocity: ", angular)
         #print("Lidar Data: ", robot.gap_detector.processed_lidar_data)
-        print("GOAL: ", robot.goal_controller.get_current_goal())
+        #print("GOAL: ", robot.goal_controller.get_current_goal())
         robot.draw(ax)
 
         plt.pause(0.05)  # Pause to update the display
 
         if count == 20000 or robot.goal_controller.all_goals_reached():
             break
-        count += 1
 
     plt.show()  # Keep the plot window open
 
