@@ -40,7 +40,7 @@ class RenderSystem:
         self.plot_lidar(ax, lidar_data, pose)
         self.plot_odometer(ax, pose)
         self.plot_goals(ax, visited_goals, current_goal, other_goals)
-        self.plot_gap(ax, pose)
+        self.plot_gap(ax)
         self.plot_trajectory(ax, pose)
         self.plot_environment(ax, obstacles)
 
@@ -129,13 +129,13 @@ class RenderSystem:
             yr = robot_pose[1] + distance * np.sin(adjusted_angle)
             ax.plot([robot_pose[0], xr], [robot_pose[1], yr], 'y--')
 
-    def plot_gap(self, ax, pose):
+    def plot_gap(self, ax):
         """
         Draw the best gap detected
         """
-        gap = self._gap_detector.get_best_gap()['center']
+        gap = self._gap_detector._gap_goal
         if gap:
-            ax.scatter(gap[0] + pose[0], gap[1] + pose[1], c='y', marker='o') 
+            ax.scatter(gap[0], gap[1], c='y', marker='o') 
 
 
     def plot_trajectory(self, ax, pose):
