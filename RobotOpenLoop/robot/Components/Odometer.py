@@ -1,4 +1,4 @@
-from math import cos, sin
+from math import cos, sin, pi
 
 class Odometer():
     def __init__(self):
@@ -6,7 +6,7 @@ class Odometer():
         Constructor: Initializes the odometer component with default values.
         """
         # private variables representing the internal state
-        self._pose = [0, 0, 0]  # pose of the robot [x, y, theta]
+        self._pose = [0, 0, pi/2]  # pose of the robot [x, y, theta]
         self._vel = 0  # linear velocity
         self._steering = 0  # steering angle or angular velocity
         

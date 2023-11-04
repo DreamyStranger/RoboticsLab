@@ -11,7 +11,5 @@ class EnvironmentSensingSystem:
         self.robot_height = .3  # Height of the robot
     
     def update(self, goal):
-        if not goal:
-            return
         pose = self._robot_odometer.get_pose()
         self._gap_detector.update(pose)
