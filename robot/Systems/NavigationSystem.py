@@ -1,49 +1,56 @@
 from math import sqrt
 
 class NavigationSystem():
-    def __init__(self, odometer, pid, steering_controller, proportional_controller, goal_controller):
+    """
+    A class that represents the navigation system of a robot. This system integrates various controllers 
+    and components to manage the robot's navigation towards goals, including steering and velocity adjustments.
+
+    Attributes:
+        _odometer (Odometer): The odometer component of the robot for tracking its pose.
+        _pid (PidController): The PID controller for velocity control.
+        _steering_controller (SteeringController): The steering controller for direction control.
+        _proportional_controller (ProportionalController): The proportional controller as an alternative for PID control.
+        _goal_controller (GoalController): The goal management component of the robot.
+        type (str): The default type of velocity controller to use ("pid" or other types).
+    """
+    def __init__(self, robot):
         """
-        Constructor: Initializes the NavigationSystem with necessary controllers and components.
-        
+        Initializes the NavigationSystem with necessary controllers and components from the robot.
+
         Parameters:
-        - odometer: The odometer component for pose and velocity.
-        - pid: The PID controller for velocity.
-        - steering_controller: The steering controller for direction.
-        - proportional_controller: The proportional controller as an alternative for PID.
-        - goal_controller: The goal controller managing navigation goals.
+            robot (Robot): The robot instance containing the necessary components for navigation.
         """
+        self._odometer = robot.odometer
+        self._pid = robot.pid
+        self._steering_controller = robot.steering_controller
+        self._proportional_controller = robot.proportional_controller
+        self._goal_controller = robot.goal_controller
         
-        # Modules
-        self._odometer = odometer
-        self._pid = pid
-        self._steering_controller = steering_controller
-        self._proportional_controller = proportional_controller
-        self._goal_controller = goal_controller
-        
-        self.type = "pid"  # Default type of controller to use for velocity.
+        self.type = "pid"
 
     def update(self, dt):
         """
-        Update the Navigation System, including goal, steering, and velocity controllers.
-        
+        Updates the navigation system based on the current robot pose, goal status, and time step. 
+        This includes updating goal status, calculating steering commands, and adjusting velocity.
+
         Parameters:
-        - dt: The time step.
+            dt (float): The time step for updating the navigation system.
         """
-        # Retrieve general stats from the odometer.
+        # Retrieve current configuration from the Odometer.
         pose = self._odometer.get_pose()  
         vel = self._odometer.get_vel()  
         cruise_vel = self._odometer.cruise_vel  
         max_vel = self._odometer.max_vel  
         
-        # Update the goal controller with the current pose.
+        # Update the Goal Controller.
         self._goal_controller.update(pose, dt)
         
-        # Check if all goals have been reached, then reset the odometer.
+        # All goals reached.
         if self._goal_controller.all_goals_reached():
             self._odometer.reset()
             return
         
-        # Calculate steering command based on the current goal.
+        # Compute steering.
         gap_goal = self._goal_controller.gap_goal
         goal = self._goal_controller.get_current_goal()
         if not gap_goal:
@@ -51,7 +58,7 @@ class NavigationSystem():
         else:
             steering = self._steering_controller.compute(gap_goal, pose)
 
-        # Calculate velocity command based on the chosen control strategy and update the odometer.
+        # Compute velocity.
         distance = self._goal_controller.get_distance_to_goal()
         vel = self.calculate_velocity(cruise_vel, vel, dt, distance, max_vel)
 

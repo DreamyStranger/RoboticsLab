@@ -1,9 +1,16 @@
 from math import pi, sin, cos, atan2
 
 class SteeringController:
+    """
+    A class to control the steering of a robot towards a specified goal.
+
+    Attributes:
+        _K_h (float): Gain for the steering control, affecting how quickly the robot turns towards the goal.
+        max_steering (float): Maximum allowable steering angle to ensure the robot's turning is within realistic bounds.
+    """
     def __init__(self):
         """
-        Constructor: Initializes the steering controller with default gains.
+        Initializes the SteeringController with default steering gain and maximum steering angle.
         """
         # Gains for the steering controller
         self._K_h = 3  # Gain for the steering control
@@ -11,7 +18,17 @@ class SteeringController:
         
     def compute(self, goal, pose):
         """
-        Computes the steering command based on the current pose and the goal position.
+        Computes the steering angle required to orient the robot towards the goal.
+
+        The method calculates the desired orientation to the goal and adjusts the current steering angle to align 
+        with this orientation. The steering angle is normalized and limited to ensure realistic robot movement.
+
+        Parameters:
+            goal (tuple): The target goal coordinates (x, y) towards which the robot should steer.
+            pose (list): The current pose of the robot (x, y, theta).
+
+        Returns:
+            float: The calculated steering angle to align the robot towards the goal.
         """
         # Calculate the desired orientation towards the goal
         desired_theta = atan2(goal[1] - pose[1], goal[0] - pose[0])
@@ -21,20 +38,30 @@ class SteeringController:
         steering = self._K_h *atan2(sin(steering), cos(steering))  # Normalize the steering angle
         
         # Limit steering
-        #steering = sign(steering) * min(abs(steering), self.max_steering)
+        steering = sign(steering) * min(abs(steering), self.max_steering)
         
         return steering 
         
-    # Setter method to modify the gain of the controller
     def set_gains(self, K_steering):
         """
-        Set the gain of the steering controller.
+        Sets the gain for the steering controller.
+
+        A higher gain results in more aggressive steering towards the goal.
+
+        Parameters:
+            K_steering (float): The new steering gain.
         """
-        self._K_h = K_steering  # Set the steering gain
+        self._K_h = K_steering
 
 def sign(x):
     """
-    Returns the sign of a given number.
+    Determines the sign of a given number, indicating its positivity or negativity.
+
+    Parameters:
+        x (float): The number whose sign is to be determined.
+
+    Returns:
+        int: Returns 1 if the number is positive or zero, -1 if the number is negative.
     """
     if x >= 0:
         return 1

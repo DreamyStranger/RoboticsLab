@@ -1,29 +1,41 @@
 from math import sqrt
-from Queue import Queue  # python 2.7, used in robot
-#from queue import Queue	  # python 3, used in simulation
+#from Queue import Queue  # python 2.7, used in robot
+from queue import Queue	  # python 3, used in simulation
 
 class GoalController():
+    """
+    A class for managing navigation goals in a robotic system.
+
+    Attributes:
+        _goals (Queue): A queue of goals to be reached by the robot.
+        _goal (list): The current goal the robot is navigating towards.
+        _visited (list): A list of goals that have been visited/reached.
+        gap_goal (list): The current goal derived from the largest gap detected.
+        _goals_reached (bool): Flag indicating whether all goals have been reached.
+        _distance (float): The current distance to the goal.
+        distance_accuracy (float): The accuracy threshold for reaching a goal.
+    """
     def __init__(self):
         """
-        Initialize the GoalController with necessary attributes.
+        Initializes the GoalController with default settings and empty goal structures.
         """
-        self._goals = Queue()  # Queue to hold the sequence of goals
-        self._goal = []  # Current goal
-        self._visited = [] # Visited goals
-        self.gap_goal = [] # Goal from the largest gap
-        self._goals_reached = False  # Flag to check if goal is reached
-        self._distance = 0  # Initializing the _distance attribute
-        self.distance_accuracy = 0.1  # Accuracy threshold for reaching a goal
+        self._goals = Queue() 
+        self._goal = []
+        self._visited = []
+        self.gap_goal = [] 
+        self._goals_reached = False 
+        self._distance = 0  
+        self.distance_accuracy = 0.1 
 
     def distance_to_goal(self, pose):
         """
-        Calculate the Euclidean distance between the current pose and the goal.
+        Calculates the Euclidean distance between the robot's current position and the goal.
 
         Parameters:
-        - pose: The current position of the robot.
+            pose (tuple): The current position of the robot (x, y, theta).
 
         Returns:
-        - float: The Euclidean distance to the goal.
+            float: The Euclidean distance to the current goal.
         """
         if not self._goal:
             return 0
@@ -32,11 +44,11 @@ class GoalController():
 
     def update(self, pose, dt):
         """
-        Update the goal and check whether it has been reached.
+        Updates the status of the current goal. Checks if the goal has been reached and updates the goal queue accordingly.
 
         Parameters:
-        - pose: The current position of the robot.
-        - dt: Time step.
+            pose (tuple): The current position of the robot (x, y, theta).
+            dt (float): The time step for updating the goal status.
         """
         self._update_current_goal(dt)
         
@@ -51,20 +63,20 @@ class GoalController():
 
     def _update_current_goal(self, dt):
         """
-        Update the current goal if there is none.
+        Internal method to update the current goal if there is none.
 
         Parameters:
-        - dt: Time step.
+            dt (float): The time step for updating the goal status.
         """
         if not self._goal:
             self._goal_reached_action(dt)
 
     def _goal_reached_action(self, dt):
         """
-        Actions to perform when a goal is reached.
+        Internal method to perform actions when a goal is reached. This includes updating the visited list and fetching the next goal from the queue.
 
         Parameters:
-        - dt: Time step.
+            dt (float): The time step for updating the goal status.
         """
         if self._goals.empty():
             self._goal = []
@@ -74,20 +86,20 @@ class GoalController():
 
     def add_goal(self, goal):
         """
-        Add a new goal to the queue.
+        Adds a new goal to the queue.
 
         Parameters:
-        - goal: The new goal to be added.
+            goal (list): The new goal coordinates (x, y) to be added.
         """
         self._goals.put(goal)
 
     def add_goals(self, goal_x, goal_y):
         """
-        Add multiple goals to the queue.
+        Adds multiple goals to the queue.
 
         Parameters:
-        - goal_x: List of x coordinates of the goals.
-        - goal_y: List of y coordinates of the goals.
+            goal_x (list): List of x coordinates of the goals.
+            goal_y (list): List of y coordinates of the goals.
         """
         n = len(goal_x)
         for i in range(n):
@@ -95,33 +107,45 @@ class GoalController():
 
     def all_goals_reached(self):
         """
-        Check if all goals were reached.
+        Checks whether all goals in the queue have been reached.
 
         Returns:
-        - bool: True if all goals have been reached, otherwise False.
+            bool: True if all goals have been reached, False otherwise.
         """
         return self._goals_reached
     
     def get_current_goal(self):
         """
-            Return current goal
+        Retrieves the current goal coordinates.
+
+        Returns:
+            list: The current goal coordinates (x, y).
         """
         return self._goal
     
     def get_distance_to_goal(self):
         """
-            Return distance to current goal
+        Retrieves the current distance to the goal.
+
+        Returns:
+            float: The current distance to the goal.
         """
         return self._distance
     
     def get_goals(self):
         """
-            Return not visited goals
+        Retrieves the queue of goals that have not been visited.
+
+        Returns:
+            Queue: The queue of unvisited goals.
         """
         return self._goals
     
     def get_visited(self):
         """
-            Return visited goals
+        Retrieves the list of goals that have been visited.
+
+        Returns:
+            list: The list of visited goals.
         """
         return self._visited

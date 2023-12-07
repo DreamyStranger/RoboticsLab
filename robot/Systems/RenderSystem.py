@@ -1,32 +1,48 @@
 import numpy as np
 
 class RenderSystem:
-    def __init__(self, odometer, goal_controller, gap_detector, environment):
-        """
-            Constructor
-        """
-        self._odometer = odometer
-        self._goal_controller = goal_controller
-        self._gap_detector = gap_detector
-        self._environment = environment
+    """
+    A class responsible for rendering and visualizing the state of a robot and its environment. It provides 
+    functionalities to draw the robot, its trajectory, goals, and detected gaps, as well as the environment obstacles.
 
-        self._trajectory_x = []  # List to store x coordinates of trajectory
-        self._trajectory_y = []  # List to store y coordinates of trajectory
+    Attributes:
+        _odometer (Odometer): The odometer component of the robot for obtaining its pose.
+        _goal_controller (GoalController): The goal controller of the robot for accessing current and visited goals.
+        _gap_detector (GapDetector): The gap detector component of the robot for gap visualization.
+        _environment (Environment): The environment in which the robot operates.
+        _trajectory_x (list): List to store the x coordinates of the robot's trajectory.
+        _trajectory_y (list): List to store the y coordinates of the robot's trajectory.
+        robot_width (float): The width of the robot, used in visualization.
+        robot_height (float): The height of the robot, used in visualization.
+    """
 
-        self.robot_width = .6   # Width of the robot
-        self.robot_height = .3  # Height of the robot
+    def __init__(self, robot):
+        """
+        Initializes the RenderSystem with necessary components from the robot.
+
+        Parameters:
+            robot (Robot): The robot instance containing necessary components for rendering.
+        """
+        self._odometer = robot.odometer
+        self._goal_controller = robot.goal_controller
+        self._gap_detector = robot.gap_detector
+        self._environment = robot.environment
+
+        self._trajectory_x = []  
+        self._trajectory_y = []
+        self.robot_width = .6   
+        self.robot_height = .3
 
     def draw(self, ax):
         """
-        Main drawing function. Calls other drawing methods to render the robot's state.
+        Main drawing function that calls other methods to render the robot's state and environment.
 
         Parameters:
-        ax : matplotlib axis object
-            The axis to draw on.
+            ax (matplotlib.axes.Axes): The matplotlib axis object to draw on.
         """
 
         ax.clear()  # Clear the previous frame
-        ax.grid(True)  # Optional: Add grid for better visualization
+        ax.grid(True)  # Add grid for better visualization
         
         # Retrieve necessary states
         pose = self._odometer.get_pose()
@@ -50,15 +66,12 @@ class RenderSystem:
 
     def plot_odometer(self, ax, pose):
         """
-        Draw the robot based on its pose.
+        Draws the robot on the given matplotlib axis based on its current pose.
 
         Parameters:
-        ax : matplotlib axis object
-            The axis to draw on.
-        pose : tuple
-            The pose of the robot (x, y, theta).
+            ax (matplotlib.axes.Axes): The axis to draw the robot on.
+            pose (tuple): The pose of the robot (x, y, theta).
         """
-
         width = self.robot_width
         height = self.robot_height
 
@@ -87,17 +100,13 @@ class RenderSystem:
 
     def plot_goals(self, ax, visited_goals, current_goal, other_goals):
         """
-        Draw the goals on the map.
+        Draws the goals (visited, current, and remaining) on the map.
 
         Parameters:
-        ax : matplotlib axis object
-            The axis to draw on.
-        visited_goals : list of tuples
-            Goals that have been visited.
-        current_goal : tuple
-            The current goal coordinates.
-        other_goals : queue
-            The remaining goals to visit.
+            ax (matplotlib.axes.Axes): The axis to draw the goals on.
+            visited_goals (list): List of visited goals.
+            current_goal (tuple): The current goal coordinates.
+            other_goals (queue): Queue of remaining goals.
         """
         # Plot visited goals
         for point in visited_goals:
@@ -113,10 +122,12 @@ class RenderSystem:
 
     def plot_lidar(self, ax, lidar_data, robot_pose):
         """
-        Plot the processed LIDAR data.
-        
-        :param robot_pos: Position of the robot as (x, y, theta).
-        :param show: Whether to display the plot.
+        Plots the processed LIDAR data on the given axis, showing the detected distances.
+
+        Parameters:
+            ax (matplotlib.axes.Axes): The axis to plot the LIDAR data on.
+            lidar_data (list): The processed LIDAR data.
+            robot_pose (tuple): The current pose of the robot.
         """
         # Define angles for processed LIDAR data (-90 to +90 degrees)
         total_segments = len(lidar_data)
@@ -131,7 +142,10 @@ class RenderSystem:
 
     def plot_gap(self, ax):
         """
-        Draw the best gap detected
+        Draws the best gap detected by the gap detector.
+
+        Parameters:
+            ax (matplotlib.axes.Axes): The axis to draw the gap on.
         """
         gap = self._gap_detector._gap_goal
         if gap:
@@ -140,13 +154,11 @@ class RenderSystem:
 
     def plot_trajectory(self, ax, pose):
         """
-        Draw the trajectory of the robot.
+        Draws the trajectory of the robot based on its movement history.
 
         Parameters:
-        ax : matplotlib axis object
-            The axis to draw on.
-        pose : tuple
-            The current pose of the robot.
+            ax (matplotlib.axes.Axes): The axis to draw the trajectory on.
+            pose (tuple): The current pose of the robot.
         """
         self._trajectory_x.append(pose[0])
         self._trajectory_y.append(pose[1])
@@ -155,5 +167,12 @@ class RenderSystem:
         ax.plot(self._trajectory_x, self._trajectory_y, 'g-', label='Trajectory')
 
     def plot_environment(self, ax, obstacles):
+        """
+        Draws the obstacles from the environment on the given axis.
+
+        Parameters:
+            ax (matplotlib.axes.Axes): The axis to draw the environment on.
+            obstacles (list): List of obstacles in the environment.
+        """
         for obstacle in obstacles:
             obstacle.draw(ax)
