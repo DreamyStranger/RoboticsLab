@@ -39,7 +39,7 @@ class GapDetector:
         self.processed_lidar_data = np.clip(segment_means, min_distance, max_distance)
         self.threshold_distance = min(min(self.processed_lidar_data) + 0.4, max(self.processed_lidar_data))
 
-    def update(self, robot_pose):
+    def update(self, robot_pose, goal):
         self.find_gaps()
         self.find_largest_gap()
         self.calculate_weighted_target_point()
