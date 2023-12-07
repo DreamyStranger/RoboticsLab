@@ -2,7 +2,7 @@ from math import sin, cos, radians, atan2
 import numpy as np
 
 class GapDetector:
-    def __init__(self, angular_resolution=5):
+    def __init__(self, angular_resolution = .5):
         self._best_gap = None
         self._gap_goal = []
         self._gaps = []  
@@ -37,9 +37,9 @@ class GapDetector:
 
         self.processed_lidar_data = segment_means
         self.processed_lidar_data = np.clip(segment_means, min_distance, max_distance)
-        self.threshold_distance = min(min(self.processed_lidar_data) + 0.3, max(self.processed_lidar_data))
+        self.threshold_distance = min(min(self.processed_lidar_data) + 0.4, max(self.processed_lidar_data))
 
-    def update(self, robot_pose):
+    def update(self, robot_pose, goal):
         self.find_gaps()
         self.find_largest_gap()
         self.calculate_weighted_target_point()
@@ -77,12 +77,14 @@ class GapDetector:
         lidar_data = self.processed_lidar_data
         # Calculate the weights based on the distance to obstacles within the gap
         start_index, end_index = largest_gap
-        gap_data = lidar_data[start_index:end_index+1]
-        weights = gap_data - np.min(gap_data) + 1  # Add 1 to avoid division by zero
-        weighted_sum = np.sum(np.arange(start_index, end_index+1) * weights)
+        gap_data = lidar_data[start_index:end_index]
+        center_index = int((end_index + start_index)//2)
+        target_distance = lidar_data[center_index]
+        """weights = gap_data - np.min(gap_data) + 1  # Add 1 to avoid division by zero
+        weighted_sum = np.sum(np.arange(start_index, end_index + 1) * weights)
         total_weight = np.sum(weights)
         center_index = int(weighted_sum / total_weight)
-        target_distance = lidar_data[center_index]
+        target_distance = lidar_data[center_index]"""
         self._gap_goal =[center_index, target_distance]
 
     def calculate_global_target(self, robot_pose):
