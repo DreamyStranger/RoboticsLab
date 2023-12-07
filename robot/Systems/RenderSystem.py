@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class RenderSystem:
     """
@@ -63,6 +64,8 @@ class RenderSystem:
         # Limit workspace 
         ax.set_xlim([-5, 5])
         ax.set_ylim([0, 10])
+
+        plt.pause(0.1)  # Pause to update the display
 
     def plot_odometer(self, ax, pose):
         """

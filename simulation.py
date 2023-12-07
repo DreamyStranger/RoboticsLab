@@ -34,8 +34,6 @@ def main():
         #print("GOAL: ", robot.goal_controller.get_current_goal())
         robot.draw(ax)
 
-        plt.pause(0.05)  # Pause to update the display
-
         if count == 20000 or robot.goal_controller.all_goals_reached():
             break
 
