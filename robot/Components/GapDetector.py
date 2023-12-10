@@ -114,7 +114,6 @@ class GapDetector:
         """
         largest_gap = self._best_gap
         lidar_data = self.processed_lidar_data
-        # Calculate the weights based on the distance to obstacles within the gap
         start_index, end_index = largest_gap
         center_index = int((end_index + start_index)//2)
         target_distance = lidar_data[center_index]

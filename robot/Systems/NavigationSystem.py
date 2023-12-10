@@ -11,6 +11,7 @@ class NavigationSystem():
         _steering_controller (SteeringController): The steering controller for direction control.
         _proportional_controller (ProportionalController): The proportional controller as an alternative for PID control.
         _goal_controller (GoalController): The goal management component of the robot.
+        _state_machine (StateMachine): The Finite State Machine of the robot.
         type (str): The default type of velocity controller to use ("pid" or other types).
     """
     def __init__(self, robot):
@@ -25,6 +26,7 @@ class NavigationSystem():
         self._steering_controller = robot.steering_controller
         self._proportional_controller = robot.proportional_controller
         self._goal_controller = robot.goal_controller
+        self._state_machine = robot.state_machine
         
         self.type = "pid"
 
@@ -36,6 +38,9 @@ class NavigationSystem():
         Parameters:
             dt (float): The time step for updating the navigation system.
         """
+        
+        if self._state_machine.is_state("Idle"):
+            return
         # Retrieve current configuration from the Odometer.
         pose = self._odometer.get_pose()  
         vel = self._odometer.get_vel()  

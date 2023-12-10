@@ -5,16 +5,18 @@ from .Components.SteeringController import SteeringController
 from .Components.ProportionalController import ProportionalController
 from .Components.GoalController import GoalController
 from .Components.GapDetector import GapDetector
+from .Components.StateMachine import StateMachine
 
 # Environment
 from .Environment.Environment import Environment
-
+from .Environment.EnvironmentCreater import EnvironmentCreator
 
 # Systems
 from .Systems.NavigationSystem import NavigationSystem
 from .Systems.RenderSystem import RenderSystem
 from .Systems.EnvironmentSensing import EnvironmentSensingSystem
-from .Environment.EnvironmentCreater import EnvironmentCreator
+from .Systems.InputSystem import InputSystem
+
 
 class Robot:
     """
@@ -28,10 +30,12 @@ class Robot:
         proportional_controller (ProportionalController): An alternative controller for proportional control.
         goal_controller (GoalController): The controller for managing navigation goals.
         gap_detector (GapDetector): The component for detecting gaps in the environment.
+        state_machine (StateMachine): The Finite State Machine of the robot.
         environment (Environment): The representation of the robot's operating environment.
         environment_sensing (EnvironmentSensingSystem): The system for sensing and interacting with the environment.
         navigation (NavigationSystem): The system for managing the robot's navigation.
         render (RenderSystem): The system for rendering and visualizing the robot's state and environment.
+        input_system (InputSystem): The system for handling external inputs and updating the robot's state accordingly.
     """
     def __init__(self):
         """
@@ -45,6 +49,7 @@ class Robot:
         self.proportional_controller = ProportionalController()
         self.goal_controller = GoalController()
         self.gap_detector = GapDetector()
+        self.state_machine = StateMachine(self)
 
         # Environment
         self.environment = Environment()
@@ -53,6 +58,7 @@ class Robot:
         self.environment_sensing = EnvironmentSensingSystem(self, EnvironmentCreator(self.environment))
         self.navigation = NavigationSystem(self)
         self.render = RenderSystem(self)
+        self.input_system = InputSystem(self)
         
 
     def update(self, dt):
@@ -62,8 +68,9 @@ class Robot:
         Parameters:
             dt (float): The time step for updating the robot's systems.
         """
+        self.input_system.update("idle")
         self.environment_sensing.update(self.goal_controller.get_current_goal())
-        self.goal_controller.gap_goal = self.gap_detector.get_gap_goal()
+        #self.goal_controller.gap_goal = self.gap_detector.get_gap_goal()
         self.navigation.update(dt)
 
     def draw(self, ax):
@@ -74,5 +81,18 @@ class Robot:
             ax (matplotlib.axes.Axes): The matplotlib axis object on which the robot and its environment will be drawn.
         """
         self.render.draw(ax)
+
+    def reset(self):
+        """
+        Resets the key components of the robot. This includes resetting the goal controller, odometer, PID controller, 
+        and proportional controller.
+
+        This method is useful for reinitializing the robot's state either for a new operation or after an interruption, 
+        ensuring that it returns to a predefined initial state.
+        """
+        self.goal_controller.reset()
+        self.odometer.reset()
+        self.pid.reset()
+        self.proportional_controller.reset()
     
             

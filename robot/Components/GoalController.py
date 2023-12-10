@@ -149,3 +149,17 @@ class GoalController():
             list: The list of visited goals.
         """
         return self._visited
+    
+    def reset(self):
+        """
+        Resets the goal controller. This includes clearing the current goal, the queue of goals, 
+        the gap goal, and resetting the flags and distances associated with goal management.
+
+        After calling this method, the goal controller will have no current goal, no goals in the queue, and the gap 
+        goal will be cleared. The system will be ready to accept and process new goals.
+        """
+        self._goal = []
+        self._goals = Queue()
+        self.gap_goal = []
+        self._goals_reached = False
+        self._distance = 0
