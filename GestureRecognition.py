@@ -195,7 +195,7 @@ class HandGestureRecognition:
                     # Analyze gestures based on the landmarks
                 gesture = self.analyze_gestures(results, image)
                 if gesture:
-                    print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEY!")
+                    #print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEY!")
                     q.put(gesture)
 
                 cv2.imshow('MediaPipe Hands', image)

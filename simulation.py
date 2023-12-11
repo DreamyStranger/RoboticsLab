@@ -35,6 +35,7 @@ def consumer(q):
     while True:
         if not q.empty:
             gesture = q.get()
+            print("gesture")
             if gesture:
                 robot.input_system.update("idle")
 
