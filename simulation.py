@@ -21,6 +21,8 @@ def main():
     obstacles = robot.environment.obstacles
     fig, ax = plt.subplots()
 
+    robot.input_system.update("to_goal")
+
     while True:
         linear, angular = robot.odometer.get_velocities()
         pose = robot.odometer.get_pose()
@@ -34,7 +36,7 @@ def main():
         #print("GOAL: ", robot.goal_controller.get_current_goal())
         robot.draw(ax)
 
-        if count == 20000 or robot.goal_controller.all_goals_reached():
+        if count == 200000:
             break
 
     plt.show()  # Keep the plot window open

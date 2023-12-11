@@ -69,6 +69,8 @@ class GapDetector:
         """
         self.find_gaps()
         self.find_largest_gap()
+        if not self._best_gap:
+            return
         self.calculate_weighted_target_point()
         self.calculate_global_target(robot_pose)
 

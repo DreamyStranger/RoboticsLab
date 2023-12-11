@@ -9,6 +9,7 @@ class EnvironmentSensingSystem:
         _robot_odometer (Odometer): The odometer component of the robot for tracking its pose.
         _gap_detector (GapDetector): The gap detection component for identifying navigable spaces.
         goal_controller (GoalController): The goal management component of the robot.
+        _state_machine (StateMachine): The Finite State Machine of the robot.
         robot_width (float): The width of the robot, used for sensing calculations.
         robot_height (float): The height of the robot, used for sensing calculations.
     """
@@ -26,6 +27,7 @@ class EnvironmentSensingSystem:
         self._robot_odometer = robot.odometer
         self._gap_detector = robot.gap_detector
         self.goal_controller = robot.goal_controller
+        self._state_machine = robot.state_machine
         
         self.robot_width = .2   # Width of the robot
         self.robot_height = .2  # Height of the robot
@@ -38,6 +40,8 @@ class EnvironmentSensingSystem:
         Parameters:
             goal (tuple): The current goal coordinates (x, y) that the robot is navigating towards.
         """
+        if self._state_machine.is_superstate("Real"):
+            return
         pose = self._robot_odometer.get_pose()
         goal = self.goal_controller.get_current_goal()
         #print(goal)

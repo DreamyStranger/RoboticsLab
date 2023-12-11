@@ -68,7 +68,6 @@ class Robot:
         Parameters:
             dt (float): The time step for updating the robot's systems.
         """
-        self.input_system.update("idle")
         self.environment_sensing.update(self.goal_controller.get_current_goal())
         #self.goal_controller.gap_goal = self.gap_detector.get_gap_goal()
         self.navigation.update(dt)

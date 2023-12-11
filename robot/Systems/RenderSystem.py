@@ -11,6 +11,7 @@ class RenderSystem:
         _goal_controller (GoalController): The goal controller of the robot for accessing current and visited goals.
         _gap_detector (GapDetector): The gap detector component of the robot for gap visualization.
         _environment (Environment): The environment in which the robot operates.
+        _state_machine (StateMachine): The Finite State Machine of the robot.
         _trajectory_x (list): List to store the x coordinates of the robot's trajectory.
         _trajectory_y (list): List to store the y coordinates of the robot's trajectory.
         robot_width (float): The width of the robot, used in visualization.
@@ -28,6 +29,7 @@ class RenderSystem:
         self._goal_controller = robot.goal_controller
         self._gap_detector = robot.gap_detector
         self._environment = robot.environment
+        self._state_machine = robot.state_machine
 
         self._trajectory_x = []  
         self._trajectory_y = []
@@ -41,6 +43,8 @@ class RenderSystem:
         Parameters:
             ax (matplotlib.axes.Axes): The matplotlib axis object to draw on.
         """
+        if self._state_machine.is_superstate("Real"):
+            return
 
         ax.clear()  # Clear the previous frame
         ax.grid(True)  # Add grid for better visualization
@@ -54,7 +58,7 @@ class RenderSystem:
         lidar_data = self._gap_detector.processed_lidar_data
 
         # Draw
-        self.plot_lidar(ax, lidar_data, pose)
+        #self.plot_lidar(ax, lidar_data, pose)
         self.plot_odometer(ax, pose)
         self.plot_goals(ax, visited_goals, current_goal, other_goals)
         self.plot_gap(ax)
@@ -63,7 +67,7 @@ class RenderSystem:
 
         # Limit workspace 
         ax.set_xlim([-5, 5])
-        ax.set_ylim([0, 10])
+        ax.set_ylim([-5, 5])
 
         plt.pause(0.1)  # Pause to update the display
 

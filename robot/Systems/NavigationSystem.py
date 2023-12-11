@@ -38,7 +38,7 @@ class NavigationSystem():
         Parameters:
             dt (float): The time step for updating the navigation system.
         """
-        
+
         if self._state_machine.is_state("Idle"):
             return
         # Retrieve current configuration from the Odometer.
@@ -52,7 +52,7 @@ class NavigationSystem():
         
         # All goals reached.
         if self._goal_controller.all_goals_reached():
-            self._odometer.reset()
+            self._state_machine.change_state("Idle", [], [])
             return
         
         # Compute steering.

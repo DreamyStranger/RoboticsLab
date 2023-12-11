@@ -44,7 +44,7 @@ class PidController:
         self._prev_error = error
         self._prev_integral = integral
         
-        return output  # Return the PID output
+        return output
         
     def reset(self):
         """

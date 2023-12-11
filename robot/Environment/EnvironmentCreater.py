@@ -40,13 +40,13 @@ class EnvironmentCreator:
 
         This method can be used to quickly initialize a standard testing environment for the robotic system.
         """
-        self.add_rectangle_obstacle(- 5, 1, 4.5, 10)
-        self.add_rectangle_obstacle(- 5, 0, 4, 1)
-        self.add_rectangle_obstacle(1, 0, 4, 1)
-        self.add_rectangle_obstacle(-6, -2, 2, 4)
-        self.add_rectangle_obstacle(4, 0, 2, 10)
-        self.add_rectangle_obstacle(2, 0, 10, 4)
-        self.add_rectangle_obstacle(1, 4, 2, 2)
-        self.add_rectangle_obstacle(0, 6, 1, 5)
-
+        #self.add_rectangle_obstacle(- 5, 1, 4.5, 10)
+        #self.add_rectangle_obstacle(- 5, 0, 4, 1)
+        #self.add_rectangle_obstacle(1, 0, 4, 1)
+        #self.add_rectangle_obstacle(-6, -2, 2, 4)
+        #self.add_rectangle_obstacle(4, 0, 2, 10)
+        #self.add_rectangle_obstacle(2, 0, 10, 4)
+        #self.add_rectangle_obstacle(1, 4, 2, 2)
+        #self.add_rectangle_obstacle(0, 6, 1, 5)
+        pass
         # Add more obstacles as needed

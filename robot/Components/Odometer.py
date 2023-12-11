@@ -18,7 +18,7 @@ class Odometer():
         self._pose = [0, 0, pi/2]  
         self._vel = 0  
         self._steering = 0
-        self.max_vel = 1 
+        self.max_vel = .6 
         self.cruise_vel = .5
 
     def transform(self, pose):
