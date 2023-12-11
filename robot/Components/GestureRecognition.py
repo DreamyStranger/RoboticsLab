@@ -1,14 +1,17 @@
 import cv2
 import mediapipe as mp
 from math import dist
+import time
 
 class HandGestureRecognition:
     def __init__(self, robot = None):
         self.cap = cv2.VideoCapture(0)
         if robot:
+            self._robot = robot
             self._robot_input_system = robot.input_system
         else:
             self._robot_input_system = None
+            self._robot = None
         self.mypoints = []
         self.results = None
 
@@ -185,11 +188,13 @@ class HandGestureRecognition:
                 gesture = self.analyze_gestures(results, image)
                 if gesture:
                     cv2.putText(image, gesture, (500, 200), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 0, 255), 2)
-                    #self.robot_input_system.process_command(gesture)
+                    if self._robot:
+                        self.robot.on_gesture_detected(gesture)
 
                 cv2.imshow('MediaPipe Hands', image)
                 if cv2.waitKey(5) & 0xFF == 27:  # Press 'ESC' to exit
                     break
+                time.sleep(0.1)
 
     def stop(self):
         self.cap.release()
@@ -247,5 +252,5 @@ class HandGestureRecognition:
 
 ##TEST
 
-recognition = HandGestureRecognition()
-recognition.start()
+#recognition = HandGestureRecognition()
+#recognition.start()

@@ -1,4 +1,5 @@
 import numpy as np
+import threading
 ### These 2 lines are for linux
 import matplotlib
 matplotlib.use('TkAgg')  # Use the TkAgg backend for interactive plots
@@ -21,10 +22,19 @@ def main():
     obstacles = robot.environment.obstacles
     fig, ax = plt.subplots()
 
-    robot.input_system.update("to_goal")
+    robot.input_system.update('to_goal')
+
+    gesture_thread = threading.Thread(target=robot.gesture_handler.start)
+    gesture_thread.start()
 
     while True:
-        linear, angular = robot.odometer.get_velocities()
+        if robot.gesture_event.is_set():
+            gesture_data = robot.gesture_data
+            robot.gesture_event.clear()  # Clear the event after processing
+
+            if gesture_data == "thumbs_up":
+                robot.input_system.update("idle")
+
         pose = robot.odometer.get_pose()
         lidar.update(pose, obstacles)
         robot.gap_detector.preprocess_lidar(lidar.get_data())
@@ -37,8 +47,10 @@ def main():
         robot.draw(ax)
 
         if count == 200000:
+            robot.gesture_handler.stop()
             break
-
+    
+    gesture_thread.join()
     plt.show()  # Keep the plot window open
 
 if __name__ == "__main__":
