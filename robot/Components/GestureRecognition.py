@@ -4,7 +4,15 @@ from math import dist
 import time
 
 class HandGestureRecognition:
+
     def __init__(self, robot = None):
+        """
+        Initializes the hand gesture recognition system.
+
+        Args:
+            cap (cv2.VideoCapture): Video capture object to read frames from the camera.
+            robot (object, optional): Robot object to handle gesture-based actions. Defaults to None.
+        """
         self.cap = cv2.VideoCapture(0)
         if robot:
             self._robot = robot
@@ -165,6 +173,12 @@ class HandGestureRecognition:
                     thickness=1)                           # Line thickness
             
     def start(self):
+        """
+        Starts the hand tracking and gesture recognition process.
+
+        It captures frames from the camera, processes them using MediaPipe to detect hand landmarks,
+        and performs gesture recognition. Detected gestures are sent to robot.
+        """
         with mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as hands:
             while self.cap.isOpened():
                 success, img = self.cap.read()
@@ -197,6 +211,9 @@ class HandGestureRecognition:
                 time.sleep(0.1)
 
     def stop(self):
+        """
+        Releases the video capture object and stops the camera feed.
+        """
         self.cap.release()
 
     def analyze_gestures(self, results, image):
