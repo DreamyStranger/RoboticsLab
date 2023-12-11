@@ -69,7 +69,7 @@ class RenderSystem:
         ax.set_xlim([-5, 5])
         ax.set_ylim([-5, 5])
 
-        plt.pause(0.1)  # Pause to update the display
+        #plt.pause(0.1)  # Pause to update the display
 
     def plot_odometer(self, ax, pose):
         """

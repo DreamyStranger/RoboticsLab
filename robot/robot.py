@@ -6,7 +6,6 @@ from .Components.ProportionalController import ProportionalController
 from .Components.GoalController import GoalController
 from .Components.GapDetector import GapDetector
 from .Components.StateMachine import StateMachine
-from .Components.GestureRecognition import HandGestureRecognition
 
 # Environment
 from .Environment.Environment import Environment
@@ -52,7 +51,6 @@ class Robot:
         self.goal_controller = GoalController()
         self.gap_detector = GapDetector()
         self.state_machine = StateMachine(self)
-        self.gesture_handler = HandGestureRecognition()
 
         # Environment
         self.environment = Environment()
@@ -62,11 +60,6 @@ class Robot:
         self.navigation = NavigationSystem(self)
         self.render = RenderSystem(self)
         self.input_system = InputSystem(self)
-
-        # Events
-        self.gesture_event = threading.Event()
-        self.gesture_data = None
-        
 
     def update(self, dt):
         """
@@ -100,9 +93,5 @@ class Robot:
         self.odometer.reset()
         self.pid.reset()
         self.proportional_controller.reset()
-
-    def on_gesture_detected(self, gesture_data):
-        self.gesture_data = gesture_data
-        self.gesture_event.set()
     
             

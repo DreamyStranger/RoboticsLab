@@ -1,8 +1,10 @@
 import numpy as np
 import threading
+from GestureRecognition import HandGestureRecognition
+from queue import Queue	 
 ### These 2 lines are for linux
 import matplotlib
-matplotlib.use('TkAgg')  # Use the TkAgg backend for interactive plots
+#matplotlib.use('TkAgg')  # Use the TkAgg backend for interactive plots
 ###
 import matplotlib.pyplot as plt
 from robot.robot import Robot
@@ -14,7 +16,13 @@ y_r = 0
 theta = 0
 freq = 20
 
-def main():
+def producer(q):
+    gesture_recognition = HandGestureRecognition()
+    #print("HI")
+    gesture_recognition.start(q)
+
+
+def consumer(q):
     count = 0
     robot = Robot()
     robot.goal_controller.add_goal([0, 10])
@@ -24,15 +32,10 @@ def main():
 
     robot.input_system.update('to_goal')
 
-    gesture_thread = threading.Thread(target=robot.gesture_handler.start)
-    gesture_thread.start()
-
     while True:
-        if robot.gesture_event.is_set():
-            gesture_data = robot.gesture_data
-            robot.gesture_event.clear()  # Clear the event after processing
-
-            if gesture_data == "thumbs_up":
+        if not q.empty:
+            gesture = q.get()
+            if gesture:
                 robot.input_system.update("idle")
 
         pose = robot.odometer.get_pose()
@@ -49,8 +52,16 @@ def main():
         if count == 200000:
             robot.gesture_handler.stop()
             break
-    
-    gesture_thread.join()
+
+
+def main():
+    q = Queue()
+    t1 = threading.Thread(target = producer, args = (q,))
+    t2 = threading.Thread(target = consumer, args = (q,))
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
     plt.show()  # Keep the plot window open
 
 if __name__ == "__main__":

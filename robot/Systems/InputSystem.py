@@ -1,3 +1,5 @@
+import numpy as np
+
 class InputSystem:
     """
     A class responsible for handling external inputs and updating the robot's state accordingly.
@@ -70,4 +72,4 @@ class InputSystem:
         Returns:
             tuple: Lists of x and y coordinates forming a single point.
         """
-        return [x + 1], [y + 1]
+        return [x + 5], [y + 1]

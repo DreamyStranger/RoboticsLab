@@ -5,7 +5,7 @@ import time
 
 class HandGestureRecognition:
 
-    def __init__(self, robot = None):
+    def __init__(self):
         """
         Initializes the hand gesture recognition system.
 
@@ -14,12 +14,6 @@ class HandGestureRecognition:
             robot (object, optional): Robot object to handle gesture-based actions. Defaults to None.
         """
         self.cap = cv2.VideoCapture(0)
-        if robot:
-            self._robot = robot
-            self._robot_input_system = robot.input_system
-        else:
-            self._robot_input_system = None
-            self._robot = None
         self.mypoints = []
         self.results = None
 
@@ -172,7 +166,7 @@ class HandGestureRecognition:
                     color=(255, 255, 0),                   # Line color 
                     thickness=1)                           # Line thickness
             
-    def start(self):
+    def start(self, q):
         """
         Starts the hand tracking and gesture recognition process.
 
@@ -201,18 +195,16 @@ class HandGestureRecognition:
                     # Analyze gestures based on the landmarks
                 gesture = self.analyze_gestures(results, image)
                 if gesture:
-                    cv2.putText(image, gesture, (500, 200), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 0, 255), 2)
-                    if self._robot:
-                        self.robot.on_gesture_detected(gesture)
+                    print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEY!")
+                    q.put(gesture)
 
                 cv2.imshow('MediaPipe Hands', image)
                 if cv2.waitKey(5) & 0xFF == 27:  # Press 'ESC' to exit
                     break
-                time.sleep(0.1)
 
     def stop(self):
         """
-        Releases the video capture object and stops the camera feed.
+        Stops the hand tracking and gesture recognition process and frees resources.
         """
         self.cap.release()
 
@@ -230,15 +222,20 @@ class HandGestureRecognition:
         if not results.multi_hand_landmarks:
             return None
         
+        gesture = None
         # Gesture recognition logic
         if self.finger(7, 8, 0) == 1:
             cv2.putText(image, "Index Closed", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 2)
+            gesture = "check"
         if self.finger(11, 12, 0) == 2:
             cv2.putText(image, "Middle Closed", (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 2)
+            gesture = "check"
         if self.finger(15, 16, 0) == 3:
             cv2.putText(image, "Ring Closed", (500, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 2)
+            gesture = "check"
         if self.finger(19, 20, 0) == 4:
             cv2.putText(image, "Little Closed", (500, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 2)
+            gesture = "check"
         
         try:
             cv2.putText(image, self.orientation(self.finger(0, 0, 1), self.finger(9, 9, 1)),(1000,100), cv2.FONT_HERSHEY_SIMPLEX, 0.9,(0, 255, 0), 2)
@@ -246,11 +243,11 @@ class HandGestureRecognition:
             pass
             
         if self.is_thumbs_up():
-            return "thumbs_up"
+            gesture = "check"
 
         # Add additional gesture recognitions here
 
-        return None
+        return gesture
     
     def is_thumbs_up(self):
         """
