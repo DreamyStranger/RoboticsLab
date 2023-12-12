@@ -13,7 +13,9 @@ class ProportionalController:
         """
         Initializes the Proportional-Integral controller with default gain values and resets internal states.
         """
-        self._K_p = .8 
+        #self._K_p = .8 
+        #self._K_i = 0.01
+        self._K_p = .1 
         self._K_i = 0.01
         self._prev_integral = 0 
         self._prev_error = 0 

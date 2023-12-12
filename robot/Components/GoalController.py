@@ -25,7 +25,7 @@ class GoalController():
         self.gap_goal = [] 
         self._goals_reached = False 
         self._distance = 0  
-        self.distance_accuracy = 0.1 
+        self.distance_accuracy = 0.2
 
     def distance_to_goal(self, pose):
         """

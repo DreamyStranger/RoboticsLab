@@ -58,7 +58,8 @@ class RenderSystem:
         lidar_data = self._gap_detector.processed_lidar_data
 
         # Draw
-        self.plot_lidar(ax, lidar_data, pose)
+        if self._state_machine.is_state("ToGoal"):
+            self.plot_lidar(ax, lidar_data, pose)
         self.plot_odometer(ax, pose)
         self.plot_goals(ax, visited_goals, current_goal, other_goals)
         self.plot_gap(ax)

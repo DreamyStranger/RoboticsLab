@@ -32,7 +32,7 @@ class InputSystem:
             self._state_machine.change_state("Idle", path_x, path_y)
         elif input_data == "heart":
             path_x, path_y = self.circle_data(pose[0], pose[1])
-            self._state_machine.change_state("Heart")
+            self._state_machine.change_state("Heart", path_x, path_y)
         elif input_data == "to_goal":
             path_x, path_y = self.point_data(pose[0], pose[1])
             path_x.append(pose[0])
@@ -57,7 +57,7 @@ class InputSystem:
         Returns:
             tuple: Lists of x and y coordinates forming a circular path.
         """
-        r = .5
+        r = 1
         theta = np.linspace(0, 2*np.pi, 100)
         x_out = x + r * np.cos(theta)
         y_out = y + r * np.sin(theta)
