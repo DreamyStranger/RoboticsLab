@@ -75,5 +75,5 @@ class InputSystem:
             tuple: Lists of x and y coordinates forming a single point.
         """
         if self._state_machine.is_superstate("Simulation"):
-            return [0], [5]
+            return [0], [4.5]
         return [x + 1], [y]
