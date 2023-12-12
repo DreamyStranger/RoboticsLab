@@ -40,6 +40,8 @@ class InputSystem:
             self._state_machine.change_state("ToGoal", path_x, path_y)
         elif input_data == "follow":
             self._state_machine.change_state("Follow", path_x, path_y)
+        elif input_data == "stop":
+            self._state_machine.change_state("Stop", [], [])
         else:
             print(f"Received unknown input: {input_data}")
 
@@ -72,4 +74,6 @@ class InputSystem:
         Returns:
             tuple: Lists of x and y coordinates forming a single point.
         """
-        return [x + 5], [y + 1]
+        if self._state_machine.is_superstate("Simulation"):
+            return [0], [5]
+        return [x + 1], [y]

@@ -38,7 +38,7 @@ class SteeringController:
         steering = self._K_h *atan2(sin(steering), cos(steering))  # Normalize the steering angle
         
         # Limit steering
-        steering = sign(steering) * min(abs(steering), self.max_steering)
+        #steering = sign(steering) * min(abs(steering), self.max_steering)
         
         return steering 
         

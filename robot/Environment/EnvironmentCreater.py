@@ -47,6 +47,5 @@ class EnvironmentCreator:
         #self.add_rectangle_obstacle(4, 0, 2, 10)
         #self.add_rectangle_obstacle(2, 0, 10, 4)
         #self.add_rectangle_obstacle(1, 4, 2, 2)
-        #self.add_rectangle_obstacle(0, 6, 1, 5)
-        pass
+        self.add_rectangle_obstacle(-0.5, 1.5, 1, 1)
         # Add more obstacles as needed

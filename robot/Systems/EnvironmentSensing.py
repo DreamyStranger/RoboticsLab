@@ -44,6 +44,5 @@ class EnvironmentSensingSystem:
             return
         pose = self._robot_odometer.get_pose()
         goal = self.goal_controller.get_current_goal()
-        #print(goal)
         if goal:
             self._gap_detector.update(pose)

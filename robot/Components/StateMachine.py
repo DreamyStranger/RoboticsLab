@@ -5,6 +5,7 @@ class State(Enum):
     Heart = 2
     ToGoal = 3
     Follow = 4
+    Stop = 5
 
 class SuperState(Enum):
     Simulation = 1

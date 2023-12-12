@@ -17,8 +17,6 @@ from .Systems.RenderSystem import RenderSystem
 from .Systems.EnvironmentSensing import EnvironmentSensingSystem
 from .Systems.InputSystem import InputSystem
 
-import threading
-
 class Robot:
     """
     A class representing a complete robot system. It integrates various components and systems necessary for 
@@ -69,7 +67,7 @@ class Robot:
             dt (float): The time step for updating the robot's systems.
         """
         self.environment_sensing.update(self.goal_controller.get_current_goal())
-        #self.goal_controller.gap_goal = self.gap_detector.get_gap_goal()
+        self.goal_controller.gap_goal = self.gap_detector.get_gap_goal()
         self.navigation.update(dt)
 
     def draw(self, ax):

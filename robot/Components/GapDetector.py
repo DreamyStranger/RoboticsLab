@@ -27,7 +27,7 @@ class GapDetector:
         self.angular_resolution = angular_resolution
         self.threshold_distance = 0
 
-    def preprocess_lidar(self, lidar_data, min_distance = 0.1, max_distance = 3):
+    def preprocess_lidar(self, lidar_data, min_distance = 0.1, max_distance = 2):
         """
         Preprocesses the LIDAR data by segmenting it into angular segments and calculating the mean distance in each segment.
         The processed data provides a simplified representation of the environment, focusing on a 180-degree field in front of the robot.
@@ -68,9 +68,10 @@ class GapDetector:
             robot_pose (tuple): The current pose of the robot as (x, y, theta).
         """
         self.find_gaps()
-        self.find_largest_gap()
-        if not self._best_gap:
+        if len(self._gaps) < 1:
+            self._gap_goal = []
             return
+        self.find_largest_gap()
         self.calculate_weighted_target_point()
         self.calculate_global_target(robot_pose)
 
@@ -87,9 +88,9 @@ class GapDetector:
                 # Start of a new gap
                 start_index = i
                 in_gap = True
-            elif (distance <= self.threshold_distance or i == len(lidar_data) - 1) and in_gap:
+            elif distance <= self.threshold_distance and in_gap:
                 # End of the current gap
-                end_index = i - 1 if distance <= self.threshold_distance else i
+                end_index = i
                 gaps.append((start_index, end_index))
                 in_gap = False
         self._gaps = gaps

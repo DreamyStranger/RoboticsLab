@@ -195,12 +195,14 @@ class HandGestureRecognition:
                     # Analyze gestures based on the landmarks
                 gesture = self.analyze_gestures(results, image)
                 if gesture:
-                    #print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEY!")
+                    print("Gesture: ",gesture)
                     q.put(gesture)
 
                 cv2.imshow('MediaPipe Hands', image)
                 if cv2.waitKey(5) & 0xFF == 27:  # Press 'ESC' to exit
                     break
+                
+                time.sleep(0.1)
 
     def stop(self):
         """
@@ -223,27 +225,35 @@ class HandGestureRecognition:
             return None
         
         gesture = None
-        # Gesture recognition logic
+        count = 4
         if self.finger(7, 8, 0) == 1:
             cv2.putText(image, "Index Closed", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 2)
-            gesture = "check"
+            count -= 1
         if self.finger(11, 12, 0) == 2:
             cv2.putText(image, "Middle Closed", (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 2)
-            gesture = "check"
+            count -= 1
         if self.finger(15, 16, 0) == 3:
             cv2.putText(image, "Ring Closed", (500, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 2)
-            gesture = "check"
+            count -= 1
         if self.finger(19, 20, 0) == 4:
             cv2.putText(image, "Little Closed", (500, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 2)
-            gesture = "check"
-        
+            count -= 1
+        #if count == 0:
+            #gesture = "stop"
+
         try:
             cv2.putText(image, self.orientation(self.finger(0, 0, 1), self.finger(9, 9, 1)),(1000,100), cv2.FONT_HERSHEY_SIMPLEX, 0.9,(0, 255, 0), 2)
         except:
             pass
             
         if self.is_thumbs_up():
-            gesture = "check"
+            gesture = "idle"
+        
+        if self.is_one_finger():
+            gesture = "to_goal"
+
+        if self.is_two_fingers():
+            gesture = "heart"
 
         # Add additional gesture recognitions here
 
@@ -263,7 +273,57 @@ class HandGestureRecognition:
                             return True
         return False
     
+    def is_one_finger(self):
+        """
+        Determines if the hand gesture is 'one_finger'.
 
+        Returns:
+            bool: True if the gesture is 'one_finger', False otherwise.
+        """
+        if self.finger(7, 8, 0) != 1 and self.finger(11, 12, 0) == 2 and self.finger(15, 16, 0) == 3 and self.finger(19, 20, 0) == 4:      #if all the fingers are closed
+                if self.finger(4, 4, 1)[1] < self.finger(0, 0, 1)[1]: # y of thumb > y of palm
+                    if self.orientation(self.finger(0, 0, 1), self.finger(9, 9, 1)) == "Down":
+                        return True
+        return False
+    
+    def is_two_fingers(self):
+        """
+        Determines if the hand gesture is 'two_fingers'.
+
+        Returns:
+            bool: True if the gesture is 'two_fingers', False otherwise.
+        """
+        if self.finger(7, 8, 0) != 1 and self.finger(11, 12, 0) != 2 and self.finger(15, 16, 0) == 3 and self.finger(19, 20, 0) == 4:      #if all the fingers are closed
+                if self.finger(4, 4, 1)[1] < self.finger(0, 0, 1)[1]: # y of thumb > y of palm
+                    if self.orientation(self.finger(0, 0, 1), self.finger(9, 9, 1)) == "Down":
+                        return True
+        return False
+    
+    def is_three_fingers(self):
+        """
+        Determines if the hand gesture is .
+
+        Returns:
+            bool: True if the gesture is 'three_fingers', False otherwise.
+        """
+        if self.finger(7, 8, 0) != 1 and self.finger(11, 12, 0) != 2 and self.finger(15, 16, 0) != 3 and self.finger(19, 20, 0) == 4:      #if all the fingers are closed
+                if self.finger(4, 4, 1)[1] < self.finger(0, 0, 1)[1]: # y of thumb > y of palm
+                    if self.orientation(self.finger(0, 0, 1), self.finger(9, 9, 1)) == "Down":
+                        return True
+        return False
+    
+    def is_four_fingers(self):
+        """
+        Determines if the hand gesture is 'four_fingers'.
+
+        Returns:
+            bool: True if the gesture is 'four_fingers' False otherwise.
+        """
+        if self.finger(7, 8, 0) != 1 and self.finger(11, 12, 0) != 2 and self.finger(15, 16, 0) != 3 and self.finger(19, 20, 0) != 4:      #if all the fingers are closed
+                if self.finger(4, 4, 1)[1] < self.finger(0, 0, 1)[1]: # y of thumb > y of palm
+                    if self.orientation(self.finger(0, 0, 1), self.finger(9, 9, 1)) == "Down":
+                        return True
+        return False
 ##TEST
 
 #recognition = HandGestureRecognition()

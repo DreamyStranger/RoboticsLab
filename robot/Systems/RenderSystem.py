@@ -58,7 +58,7 @@ class RenderSystem:
         lidar_data = self._gap_detector.processed_lidar_data
 
         # Draw
-        #self.plot_lidar(ax, lidar_data, pose)
+        self.plot_lidar(ax, lidar_data, pose)
         self.plot_odometer(ax, pose)
         self.plot_goals(ax, visited_goals, current_goal, other_goals)
         self.plot_gap(ax)
@@ -69,7 +69,7 @@ class RenderSystem:
         ax.set_xlim([-5, 5])
         ax.set_ylim([-5, 5])
 
-        #plt.pause(0.1)  # Pause to update the display
+        plt.pause(0.1)  # Pause to update the display
 
     def plot_odometer(self, ax, pose):
         """
