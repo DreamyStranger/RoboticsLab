@@ -1,8 +1,2 @@
 # Robotics
-Navigation Options
-
-You can select different navigation options by modifying the navigation_option variable in the RobotOpenLoop/open_loop.py script. Here are the available options:
-
-    1: Point navigation
-    2: Square navigation
-    3: Circular navigation
+The current Project contains a collaborative solution to the Mobile Robotic class assignment. The project will be updated and properly documented once I build and code my robot from scratch. 
